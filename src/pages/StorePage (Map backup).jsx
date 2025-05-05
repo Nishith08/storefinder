@@ -90,11 +90,7 @@ const StorePage = () => {
     }
   };
 
-  const filteredStores = stores.filter(
-    (store) =>
-      store.name.toLowerCase().includes(search.toLowerCase()) ||
-      store.address.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredStores = stores;
 
   return (
     <div style={{ padding: '20px' }}>
@@ -118,23 +114,46 @@ const StorePage = () => {
 <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
   <input
     type="text"
-    placeholder="Search by name or address"
+    placeholder="Search by your current address"
     value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    style={{ flex: 1, padding: '8px' }}
+    style={{ flex: 1, padding: '8px' }} readonly
   />
   <button onClick={getCurrentLocationStores} style={{ padding: '8px' }}>
     Use My Location
   </button>
 </div>
 
-      <ul>
-        {filteredStores.map((store) => (
-          <li key={store.id}>
-            <strong>{store.name}</strong> - {store.address} ({store.latitude}, {store.longitude})
-          </li>
-        ))}
-      </ul>
+<ul>
+  {filteredStores.map((store) => (
+    <li key={store.id} style={{ marginBottom: "1rem" }}>
+      <strong>{store.name}</strong> - {store.address} ({store.latitude}, {store.longitude})
+      <br />
+      <button
+        style={{ marginTop: "0.5rem" }}
+        onClick={() => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${store.latitude},${store.longitude}&travelmode=driving`;
+                window.open(googleMapsUrl, '_blank');
+              },
+              (error) => {
+                alert("Location access denied or unavailable.");
+              }
+            );
+          } else {
+            alert("Geolocation is not supported by this browser.");
+          }
+        }}
+      >
+        Get Directions
+      </button>
+    </li>
+  ))}
+</ul>
+
 
       {filteredStores.length > 0 && (
         <>
