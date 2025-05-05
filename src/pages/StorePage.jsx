@@ -112,14 +112,8 @@ const StorePage = () => {
         </select>
       </div>
 <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-  <input
-    type="text"
-    placeholder="Search by your current address"
-    value={search}
-    style={{ flex: 1, padding: '8px' }} readonly
-  />
   <button onClick={getCurrentLocationStores} style={{ padding: '8px' }}>
-    Use My Location
+    {search?search:"Use My Location"}
   </button>
 </div>
 
