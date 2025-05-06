@@ -61,7 +61,7 @@ const StoreLocator = () => {
 
             <span>OR</span>
 
-            <div className="form-group">
+            <div className="form-group cntr">
               <button onClick={handleDetectLocation} className="custom-btn btn1 custom-btn-primary">
                 <FontAwesomeIcon icon={faLocationDot} /> &nbsp;&nbsp;Detect Your Location
               </button>
@@ -70,7 +70,16 @@ const StoreLocator = () => {
           </div>
             <hr/>
         </form>
+        {/* <div className="container">
+          <div className="row">
+            <div className="col-3">1</div>
+            <div className="col-3">1</div>
+            <div className="col-3">1</div>
+            <div className="col-3">1</div>
+          </div>
+        </div> */}
       </div>
+
     </div>
   );
 };

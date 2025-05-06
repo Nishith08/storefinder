@@ -37,19 +37,18 @@ body {
 }
 
 /* Container */
-.container {
+/* .container {
     max-width: 90% !important;
     width: 100% !important;
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    /* align-items: center; */
+    align-items: center;
     padding: 2rem;
-}
+} */
 
 .form-container {
     width: 100%;
-/*     max-width: 100%; */
     background: var(--bg-white);
     border-radius: 16px;
     box-shadow: 0 10px 30px var(--shadow);
@@ -267,9 +266,6 @@ textarea:focus {
     display: none !important;
 }
 
-.cntr {
-  text-align: center;
-}
 
 .success-animation {
     margin-bottom: 2rem;
@@ -295,6 +291,9 @@ textarea:focus {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .cntr {
+        text-align: center;
+      }
     .container {
         padding: 1rem;
     }
