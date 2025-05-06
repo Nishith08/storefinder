@@ -46,7 +46,7 @@ const StorePage = () => {
             const response = await fetch(
               `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
             );
-            console.log(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+            //console.log(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
             const data = await response.json();
             const city = data.address.state_district || data.address.town || data.address.village || '';
             const state = data.address.state || '';
@@ -80,13 +80,38 @@ const StorePage = () => {
       console.error('Error fetching nearby stores', err);
     }
   };
+  const fetchStoresbyDistrict = async (district) => {
+    //console.log("d123");
+    try {
+      const res = await axios.get('http://localhost:8000/api/stores', {
+      }, axiosConfig);
+      
+      const allStores = res.data;
 
+      // 2. Get all cities in the given district (case-insensitive match)
+      const districtCities = citiesData
+        .filter(city => city.district.toLowerCase() === district.toLowerCase())
+        .map(city => city.city.toLowerCase());
+  
+      // 3. Filter stores where store.city is in districtCities
+      const filteredStores = allStores.filter(store =>
+        districtCities.includes(store.city.toLowerCase())
+      );
+  
+      // 4. Set the filtered store list
+      setStores(filteredStores);
+      //console.log("hi"+filteredStores+"hello");
+      //setStores(res.data);
+    } catch (err) {
+      console.error('Error fetching nearby stores', err);
+    }
+  };
   const handleCitySelect = (cityName) => {
     setSelectedCity(cityName);
     const cityObj = citiesData.find(c => c.city === cityName && c.state === selectedState);
     if (cityObj) {
       setCoordinates({ lat: cityObj.latitude, lng: cityObj.longitude });
-      fetchStoresNearby(cityObj.latitude, cityObj.longitude);
+      fetchStoresbyDistrict(cityName);
     }
   };
 
@@ -105,10 +130,10 @@ const StorePage = () => {
         </select>
 
         <select onChange={(e) => handleCitySelect(e.target.value)} value={selectedCity} disabled={!selectedState}>
-          <option value="">Select City</option>
-          {filteredCities.map(city => (
-            <option key={city.city} value={city.city}>{city.city}</option>
-          ))}
+          <option value="">Select District</option>
+          {[...new Set(filteredCities.map(city => city.district))].map(district => (
+  <option key={district} value={district}>{district}</option>
+))}
         </select>
       </div>
 <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
