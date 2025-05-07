@@ -5,6 +5,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import citiesData from '../data/cities.json'; // Adjust path if needed
 
+
 import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import shadow from 'leaflet/dist/images/marker-shadow.png';
@@ -69,6 +70,19 @@ const StorePage = () => {
     
     
 
+  const fetchAllStores = async () => {
+    try {
+      const res = await axios.get('http://localhost:8000/api/stores', axiosConfig);
+      setStores(res.data);
+    } catch (err) {
+      console.error('Error fetching nearby stores', err);
+    }
+  };
+    
+  useEffect(() => {
+    fetchAllStores();
+  }, []); // Empty array ensures this runs once when component mounts
+
   const fetchStoresNearby = async (lat, lng) => {
     try {
       const res = await axios.post('http://localhost:8000/api/find-stores', {
@@ -76,19 +90,18 @@ const StorePage = () => {
         longitude: lng,
       }, axiosConfig);
       setStores(res.data);
-      console.log("Filtered Stores88:", res.data);
     } catch (err) {
       console.error('Error fetching nearby stores', err);
     }
   };
-  const fetchStoresbyDistrict1 = async (district) => {
+  const fetchStoresbyDistrict = async (district) => {
     //console.log("d123");
     try {
       const res = await axios.get('http://localhost:8000/api/stores', {
       }, axiosConfig);
       
       const allStores = res.data;
-
+      console.log("hi11");
       // 2. Get all cities in the given district (case-insensitive match)
       const districtCities = citiesData
         .filter(city => city.district.toLowerCase() === district.toLowerCase())
@@ -101,62 +114,19 @@ const StorePage = () => {
   
       // 4. Set the filtered store list
       setStores(filteredStores);
-      //console.log("hi"+filteredStores+"hello");
+      console.log("hi"+filteredStores+"hello");
       //setStores(res.data);
     } catch (err) {
       console.error('Error fetching nearby stores', err);
     }
   };
-  const fetchStoresbyDistrict = async (district) => {
-    try {
-      // 1. Fetch all stores
-      console.log("hi")
-      const res = await axios.get('http://localhost:8000/api/stores', axiosConfig);
-      const allStores = res.data;
-  
-      // 2. Filter stores by pincode's district
-      const matchedStores = await Promise.all(
-        allStores.map(async (store) => {
-          if (!store.pincode) return null;
-  
-          try {
-            const response = await axios.get(`https://api.postalpincode.in/pincode/${store.pincode}`);
-            const pinData = response.data;
-  
-            if (
-              pinData &&
-              pinData[0]?.Status === 'Success' &&
-              pinData[0].PostOffice?.length > 0
-            ) {
-              const storeDistrict = pinData[0].PostOffice[0].District;
-              if (storeDistrict.toLowerCase() === district.toLowerCase()) {
-                return store;
-              }
-            }
-          } catch (err) {
-            console.warn(`Failed to get district for pincode ${store.pincode}`);
-          }
-  
-          return null;
-        })
-      );
-  
-      // 3. Filter out nulls
-      const filteredStores3 = matchedStores.filter(store => store !== null);
-      console.log("Filtered Stores77:", filteredStores3);
-      setStores(filteredStores3);
-    } catch (error) {
-      console.error('Error fetching stores:', error);
-      return [];
-    }
-  };
-  
   const handleCitySelect = (cityName) => {
+    
     setSelectedCity(cityName);
     const cityObj = citiesData.find(c => c.city === cityName && c.state === selectedState);
     if (cityObj) {
+      console.log("hi"+cityObj.city+"hello");
       setCoordinates({ lat: cityObj.latitude, lng: cityObj.longitude });
-      
       fetchStoresbyDistrict(cityName);
     }
   };
