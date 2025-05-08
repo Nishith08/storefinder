@@ -11,7 +11,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-       <Route path="/" element={<StorePage />} />//pincode&district wise Filter
+       <Route path="/" element={<StorePage />} />//district & district wise Filter
        <Route path="/citydistrict" element={<StorePageCityDistrict />} />//city&district wise Filter
        <Route path="/cordinates" element={<StorePageCoordinates />} />//Cordinates wise Filter, radius base(50km radius from center)
        <Route path="/StoreLocator" element={<StoreLocator />} />
