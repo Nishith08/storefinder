@@ -5,7 +5,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import citiesData from '../data/cities.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot,faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './StorePage.css';
 import MapUpdater from './MapUpdater';
@@ -227,7 +227,7 @@ const StorePage = () => {
                       }
                     }}
                   >
-                    Get Directions
+                     Get Directions <FontAwesomeIcon icon={faArrowRight} />
                   </button>
                     </Popup>
                   </Marker>
@@ -238,7 +238,8 @@ const StorePage = () => {
         </div>
 
         <hr />
-
+        <div className="store-scroll-container"
+          style={{ maxHeight: '600px', overflowX: 'hidden', overflowY: 'auto', marginBottom: '1rem' }}>
         <div className="row px-4 pb-1">
           {stores.map(store => (
             <div className="col-md-4 mb-3 mt-1" key={store.id}>
@@ -268,7 +269,7 @@ const StorePage = () => {
                       }
                     }}
                   >
-                    Get Directions
+                    Get Directions <FontAwesomeIcon icon={faArrowRight} />
                   </button>
                 </div>
               </div>
@@ -277,7 +278,8 @@ const StorePage = () => {
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default StorePage;
