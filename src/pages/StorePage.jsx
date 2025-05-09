@@ -22,7 +22,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const StorePage = () => {
-  const [zoom, setZoom] = useState(5); // Initial zoom for India
+  const [zoom, setZoom] = useState(4); // Initial zoom for India
   const [stores, setStores] = useState([]);
   const [search, setSearch] = useState('');
   const [selectedState, setSelectedState] = useState('');
@@ -155,7 +155,7 @@ const StorePage = () => {
                       required
                       disabled={!selectedState}
                     >
-                      <option value="" disabled>Select District</option>
+                      <option value="">Select District</option>
                       {[...new Set(filteredCities.map(city => city.district))].map(district => (
                         <option key={district} value={district}>{district}</option>
                       ))}
@@ -185,19 +185,50 @@ const StorePage = () => {
               <MapContainer
                 center={[coordinates.lat, coordinates.lng]}
                 zoom={zoom}
-                style={{ height: '400px', width: '100%' }}
+                style={{ 
+                  height: '400px',
+                  width: '100%',
+                  border: 1,
+                  borderRadius: '15px',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}
               >
               <MapUpdater coordinates={coordinates} zoom={zoom} />
 
+             {  /* 
+                <TileLayer
+                  url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+                  attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
+                /> */ }
                 <TileLayer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution="&copy; OpenStreetMap contributors"
-                />
+                /> 
+                
                 {stores.map(store => (
                   <Marker key={store.id} position={[store.latitude, store.longitude]}>
                     <Popup>
                       <strong>{store.name}</strong><br />
-                      {store.address}
+                      {store.address}<br/>
+                      <button
+                    className="btn btn-outline-secondary btn-sm mt-2"
+                    onClick={() => {
+                      if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                          (position) => {
+                            const userLat = position.coords.latitude;
+                            const userLng = position.coords.longitude;
+                            const url = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${store.latitude},${store.longitude}&travelmode=driving`;
+                            window.open(url, '_blank');
+                          },
+                          () => alert("Location access denied or unavailable.")
+                        );
+                      } else {
+                        alert("Geolocation is not supported by this browser.");
+                      }
+                    }}
+                  >
+                    Get Directions
+                  </button>
                     </Popup>
                   </Marker>
                 ))}
