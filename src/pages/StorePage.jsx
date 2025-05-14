@@ -111,9 +111,9 @@ const StorePage = () => {
       console.error('Error fetching stores:', error);
     }
   };
-
+  
   const handleCitySelect = (cityName) => {
-    setZoom(13);
+    setZoom(8);
     setSelectedCity(cityName);
     const cityObj = citiesData.find(c => c.district === cityName && c.state === selectedState);
     if (cityObj) {
