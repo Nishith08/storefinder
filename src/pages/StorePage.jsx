@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Select from 'react-select';
 import axios from 'axios';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
@@ -22,6 +23,8 @@ L.Icon.Default.mergeOptions({
 });
 
 const StorePage = () => {
+
+  
   const [zoom, setZoom] = useState(4); // Initial zoom for India
   const [stores, setStores] = useState([]);
   const [search, setSearch] = useState('');
@@ -37,8 +40,14 @@ const StorePage = () => {
   const states = [...new Set(citiesData.map(city => city.state))];
   const filteredCities = selectedState ? citiesData.filter(c => c.state === selectedState) : [];
 
+  const stateOptions = states.map(state => ({ value: state, label: state }));
+const districtOptions = [...new Set(filteredCities.map(city => city.district))].map(d => ({
+  value: d,
+  label: d,
+}));
+
   const getCurrentLocationStores = () => {
-    setZoom(13);
+    setZoom(8);
     
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -134,33 +143,26 @@ const StorePage = () => {
             <div className="card-body p-0">
               <form className='p-0'>
                 <div className="row">
-                  <div className="col-md-6">
-                    <select
-                      className="form-select"
-                      value={selectedState}
-                      onChange={(e) => setSelectedState(e.target.value)}
-                      required
-                    >
-                      <option value="" disabled>Select State</option>
-                      {states.map(state => (
-                        <option key={state} value={state}>{state}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-md-6 cust-gap">
-                    <select
-                      className="form-select"
-                      value={selectedCity}
-                      onChange={(e) => handleCitySelect(e.target.value)}
-                      required
-                      disabled={!selectedState}
-                    >
-                      <option value="">Select District</option>
-                      {[...new Set(filteredCities.map(city => city.district))].map(district => (
-                        <option key={district} value={district}>{district}</option>
-                      ))}
-                    </select>
-                  </div>
+                  
+<div className="col-md-6">
+  <Select
+    options={stateOptions}
+    value={stateOptions.find(opt => opt.value === selectedState)}
+    onChange={(opt) => setSelectedState(opt?.value || '')}
+    placeholder="Select State"
+    isClearable
+  />
+</div>
+<div className="col-md-6 cust-gap">
+  <Select
+    options={districtOptions}
+    value={districtOptions.find(opt => opt.value === selectedCity)}
+    onChange={(opt) => handleCitySelect(opt?.value || '')}
+    placeholder="Select District"
+    isDisabled={!selectedState}
+    isClearable
+  />
+</div>
                 </div>
 
                 <div className="text-center my-lg-4 cust-gap">
