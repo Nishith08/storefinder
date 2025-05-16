@@ -1,0 +1,27 @@
+.navbar,
+.navbar * {
+  font-family: "Oswald", sans-serif !important;
+}
+
+.navbar {
+  background: #fff !important;
+  box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.navbar .nav-link {
+  color: #001232 !important;
+  font-size: 16px !important;
+  line-height: 26px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  padding: 15px !important;
+  transition: color 0.2s !important;
+}
+
+.navbar .nav-link.active,
+.navbar .nav-link:active,
+.navbar .nav-link:focus,
+.navbar .nav-link:hover {
+  color: #a9cf38 !important;
+}
