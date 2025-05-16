@@ -8,7 +8,7 @@ const Navbar = () => {
   const location = useLocation();
 
   return (
-    <BSNavbar expand="lg" style={{ backgroundColor: '#e6e6e6' }}>
+    <BSNavbar expand="lg" sticky="top">
       <Container>
         <BSNavbar.Brand as={Link} to="/">
           <img
