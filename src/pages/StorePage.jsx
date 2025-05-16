@@ -255,13 +255,13 @@ const StorePage = () => {
                   <div className="card custom-card h-100">
                     <div className="card-body">
                       <h5 className="card-title fw-bold">{store.name}</h5>
-                      <p className="badge text-uppercase fw-light">{store.role || 'Store'}</p>
+                      <p className="badge text-uppercase fw-light">{store.role || 'Dealer'}</p>
                       <p className="card-text">
                         <FontAwesomeIcon icon={faLocationDot} className="icon-gray" />&nbsp;
                         {store.address}
                       </p>
                       <button
-                        className="btn btn-outline-secondary btn-sm mt-2"
+                        className="btn btn-outline-secondary btn-sm get-direction-btn"
                         onClick={() => {
                           if (navigator.geolocation) {
                             navigator.geolocation.getCurrentPosition(
